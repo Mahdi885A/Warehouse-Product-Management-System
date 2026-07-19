@@ -11,7 +11,7 @@ public class DatabaseConfig {
     public static final String USERNAME = "postgres";
     public static final String PASSWORD = "ZqX.7391";
 
-    public Connection getConnection (){
+    public static Connection getConnection (){
         try (Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
             System.out.println("Connected...");
             return connection;
