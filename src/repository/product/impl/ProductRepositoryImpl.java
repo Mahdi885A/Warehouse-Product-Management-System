@@ -117,4 +117,25 @@ public class ProductRepositoryImpl implements ProductRepository {
             throw new DatabaseRepositoryException("Finding All From product Table Failed...");
         }
     }
+
+    @Override
+    public Product findBelowSpecified(int quantity) {
+        String sql = "select * from product where quantity <?";
+        try(Connection connection = DatabaseConfig.getConnection()){
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1,quantity);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                return new Product(
+                        rs.getLong(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        rs.getInt(4)
+                );
+            }
+        }catch (SQLException e){
+            throw new DatabaseRepositoryException("The find product failed... ");
+        }
+        return null;
+    }
 }
