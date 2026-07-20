@@ -1,0 +1,113 @@
+package repository.supplier.Impl;
+
+import exception.DatabaseRepositoryException;
+import model.Product;
+import model.Supplier;
+import repository.supplier.SupplierRepository;
+import util.DatabaseConfig;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class SupplierRepositoryImpl implements SupplierRepository {
+    @Override
+    public Long save(Supplier supplier) {
+        String sql = "insert into product(id,company_name,phone) values (?,?,?)";
+        try (Connection connection = DatabaseConfig.getConnection()) {
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, supplier.getId());
+            ps.setString(2, supplier.getCompanyName());
+            ps.setString(3, supplier.getPhone());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return supplier.getId();
+            } catch (SQLException e) {
+                throw new DatabaseRepositoryException("supplier ID not returned!");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseRepositoryException("The supplier save failed...");
+        }
+    }
+
+    @Override
+    public boolean update(Supplier supplier, Long id) {
+        String sql = "delete supplier where id = ?";
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, id);
+            return (ps.executeUpdate() > 0);
+        } catch (SQLException e) {
+            throw new DatabaseRepositoryException("The supplier delete failed");
+        }
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        String sql = "delete supplier where id = ?";
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, id);
+            return (ps.executeUpdate() > 0);
+        } catch (SQLException e) {
+            throw new DatabaseRepositoryException("The product delete failed");
+        }
+    }
+
+        @Override
+        public Optional<Supplier> findById (Long id){
+            String sql = "select * from product where id = ? ";
+            try (Connection connection = DatabaseConfig.getConnection()) {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return Optional.of(
+                                new Supplier(
+                                        rs.getLong(1),
+                                        rs.getString(2),
+                                        rs.getString(3)
+                                )
+                        );
+                    }
+                    return Optional.empty();
+                }
+
+            } catch (SQLException e) {
+                throw new DatabaseRepositoryException("Finding By ID From product Table Failed!");
+            }
+        }
+
+
+
+    @Override
+    public List<Supplier> findAll() {
+        String sql = "select * from supplier order by id";
+
+        try(Connection connection = DatabaseConfig.getConnection()){
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            List<Supplier> suppliers =new ArrayList<>();
+            while (rs.next()){
+                suppliers.add(
+                        new Supplier(
+                                rs.getLong(1),
+                                rs.getString(2),
+                                rs.getString(3)
+                        )
+                );
+            }
+            return suppliers;
+        } catch (SQLException e) {
+            throw new DatabaseRepositoryException("Finding All From supplier Table Failed...");
+        }
+
+    }
+}
