@@ -114,7 +114,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
             return products;
         } catch (SQLException e) {
-            throw new DatabaseRepositoryException("Finding All From reservations Table Failed...");
+            throw new DatabaseRepositoryException("Finding All From product Table Failed...");
         }
     }
 }
