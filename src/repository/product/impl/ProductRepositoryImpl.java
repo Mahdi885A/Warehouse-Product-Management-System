@@ -40,14 +40,13 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public boolean update(Product product, Long id) {
-        String sql = "update product set id = ? ,name= ? ,price= ? ,quantity= ? where id = ? ";
+        String sql = "update product set name= ? ,price= ? ,quantity= ? where id = ? ";
         try(Connection connection = DatabaseConfig.getConnection()){
          PreparedStatement ps = connection.prepareStatement(sql);
-         ps.setLong(1,product.getId());
-         ps.setString(2,product.getName());
-         ps.setDouble(3,product.getPrice());
-         ps.setInt(4,product.getQuantity());
-         ps.setLong(5,id);
+         ps.setString(1,product.getName());
+         ps.setDouble(2,product.getPrice());
+         ps.setInt(3,product.getQuantity());
+         ps.setLong(4,id);
 
          return (ps.executeUpdate()>0);
 
