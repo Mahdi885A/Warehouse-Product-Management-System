@@ -38,13 +38,15 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public boolean update(Supplier supplier, Long id) {
-        String sql = "delete supplier where id = ?";
+        String sql = "update supplier set company_name =?,phone =? where id = ?";
         try (Connection connection = DatabaseConfig.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setLong(1, id);
+            ps.setString(1, supplier.getCompanyName());
+            ps.setString(2, supplier.getPhone());
+            ps.setLong(3, id );
             return (ps.executeUpdate() > 0);
         } catch (SQLException e) {
-            throw new DatabaseRepositoryException("The supplier delete failed");
+            throw new DatabaseRepositoryException("The supplier Update failed");
         }
     }
 
