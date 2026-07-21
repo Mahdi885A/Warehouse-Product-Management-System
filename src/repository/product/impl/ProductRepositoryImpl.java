@@ -26,15 +26,11 @@ public class ProductRepositoryImpl implements ProductRepository {
             ps.setString(2,product.getName());
             ps.setDouble(3,product.getPrice());
             ps.setInt(4,product.getQuantity());
-            try(ResultSet rs = ps.executeQuery()){
-                return product.getId();
-            }
-            catch (SQLException e){
-                throw new DatabaseRepositoryException("Product ID not returned!");
-            }
+            ps.executeUpdate();
+            return product.getId();
 
         }catch (SQLException e){
-            throw new DatabaseRepositoryException("The product save failed...");
+            throw new DatabaseRepositoryException("The product save failed..."+e.getMessage());
         }
     }
 
@@ -57,13 +53,14 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public boolean delete(Long id) {
-        String sql = "delete product where id = ?";
+        String sql = "delete from product where id = ?";
         try (Connection connection = DatabaseConfig.getConnection()){
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1,id);
+            ps.executeUpdate();
             return (ps.executeUpdate()>0);
         }catch (SQLException e){
-            throw new DatabaseRepositoryException("The product delete failed");
+            throw new DatabaseRepositoryException("The product delete failed"+e.getMessage());
         }
     }
 

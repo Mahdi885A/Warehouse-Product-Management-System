@@ -17,22 +17,17 @@ import java.util.Optional;
 public class SupplierRepositoryImpl implements SupplierRepository {
     @Override
     public Long save(Supplier supplier) {
-        String sql = "insert into product(id,company_name,phone) values (?,?,?)";
+        String sql = "insert into supplier(id,company_name,phone) values (?,?,?)";
         try (Connection connection = DatabaseConfig.getConnection()) {
 
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, supplier.getId());
             ps.setString(2, supplier.getCompanyName());
             ps.setString(3, supplier.getPhone());
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return supplier.getId();
-            } catch (SQLException e) {
-                throw new DatabaseRepositoryException("supplier ID not returned!");
-            }
-
+            ps.executeUpdate();
+            return supplier.getId();
         } catch (SQLException e) {
-            throw new DatabaseRepositoryException("The supplier save failed...");
+            throw new DatabaseRepositoryException("The supplier save failed..."+ e.getMessage());
         }
     }
 
@@ -52,7 +47,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public boolean delete(Long id) {
-        String sql = "delete supplier where id = ?";
+        String sql = "delete from supplier where id = ?";
         try (Connection connection = DatabaseConfig.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setLong(1, id);
@@ -91,7 +86,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
 
     @Override
     public List<Supplier> findAll() {
-        String sql = "select * from supplier order by id";
+        String sql = "select * from supplier";
 
         try(Connection connection = DatabaseConfig.getConnection()){
             PreparedStatement ps = connection.prepareStatement(sql);

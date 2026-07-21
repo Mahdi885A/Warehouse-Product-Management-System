@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProductServiceImpl implements ProductService {
-    private ProductRepositoryImpl productRepository;
+    private ProductRepositoryImpl productRepository = new ProductRepositoryImpl();
 
     @Override
     public Long creat(Product product) {

@@ -100,8 +100,8 @@ public class Main {
 
                 case 6:
                     System.out.println("===SHOW ALL SUPPLIER===");
-
                     sRI.findAll();
+
                 break;
 
                 case 7:
