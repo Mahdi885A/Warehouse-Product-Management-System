@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface ProductService extends GenericService<Product> {
     Product findBelowSpecified(int quantity);
 
-    Long totalNumberOfProduct();
+    public Long totalNumberOfProduct();
 
-    double getPriceAvg();
+    public double getPriceAvg();
 
-    Optional<Product> getMostExpensiveProduct();
+    public Optional<Product> getMostExpensiveProduct();
 }

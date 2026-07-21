@@ -126,7 +126,12 @@ public class Main {
                     sRI.delete(idSupplier);
                 break;
                 case 9:
-                    System.out.println("Under construction....");
+                    System.out.println("Most expensive product");
+                    System.out.println(pRI.getMostExpensiveProduct());
+                    System.out.println("Average product price");
+                    System.out.println(pRI.getPriceAvg());
+                    System.out.println("Most expensive product");
+                    System.out.println(pRI.totalNumberOfProduct());
                 break;
                 case 10:
                     System.out.println("Under construction....");
