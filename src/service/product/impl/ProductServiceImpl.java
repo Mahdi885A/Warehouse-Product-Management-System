@@ -6,6 +6,7 @@ import model.Product;
 import repository.product.impl.ProductRepositoryImpl;
 import service.product.ProductService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,5 +69,20 @@ public class ProductServiceImpl implements ProductService {
             throw new InvalidDataException("The Quantity must not be 0 or negative...");
         }
         return productRepository.findBelowSpecified(quantity);
+    }
+
+    @Override
+    public Long totalNumberOfProduct() {
+       return productRepository.findAll().stream().count();
+    }
+
+    @Override
+    public double getPriceAvg() {
+        return productRepository.findAll().stream().mapToDouble(Product :: getPrice).average().orElse(0.0);
+    }
+
+    @Override
+    public Optional<Product> getMostExpensiveProduct() {
+        return productRepository.findAll().stream().max(Comparator.comparingDouble(Product :: getPrice));
     }
 }
